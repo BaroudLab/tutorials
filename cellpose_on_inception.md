@@ -95,7 +95,7 @@ jupyter notebook
 On your computer, open a new terminal, and establish a ssh tunnel to `Maestro`:
 
 ```
-ssh -NL 8888:localhost:8888 maestro-$SERVERNUMBER.maestro.pasteur.fr
+ssh -NL 8888:localhost:8888 $PASTEURNAME@maestro-$SERVERNUMBER.maestro.pasteur.fr
 ```
 
 The $SERVERNUMBER is visible in the text below the singularity command. It should be a number between 1000 and 1050. If the command is successful no text appears and you can copy-paste the URL below the singularity command to your browser.
