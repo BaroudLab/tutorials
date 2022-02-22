@@ -22,10 +22,10 @@ You can now check what is on your `Inception` folders, create new folders, and m
 
 ## Moving your data from `Maestro` to `Inception`
 
-To move the data, open a terminal window, and connect to `tars`:
+To move the data, open a terminal window, and connect to `maestro`:
 
 ```
-ssh $PASTEURNAME@tars.pasteur.fr
+ssh $PASTEURNAME@maestro.pasteur.fr
 ```
 
 Now that you are connected, you can move the data from `Maestro` to `Inception`:
@@ -54,24 +54,17 @@ Cellpose needs to run within a specific environment. All Python libraries can't 
 The isies way to get singularity container is to use Docker container. Simply locate the pull address on dockerhub and run
 
 ```
-singularity pull docker://aaristov85/spheroidgraphs:tagname spheroid-graph.sif
+singularity build spheroid-graph.sif docker://aaristov85/spheroidgraphs:tagname 
 ```
 
-`Inception` uses singularity to run the containers. If you have any issues contact Andrey Aristov or Tru Huyn for more information.
+All clusters at Pasteur institute use Singularity to run the containers. 
 
-First make sure you have a container on your account. The directory architecture should be:
-
-```
-.
-├── containers                    # Container folder
-│   └── container file            # Singularity file
-└── your files
-```
+First make sure you can access the container image, othervise build one first. Many recent containers are publicly available from Tru's account at `/master/home/tru/singularity.d/containers/`. If you have any issues contact Andrey Aristov or Tru Huyn for more information.
 
 To launch the Cellpose container, in the open `Inception` terminal, type:
 
 ```
-srun --pty --gres=gpu:1 singularity shell --nv containers/c7-conda-cellpose-gpu-cu101mkl-2020-09-03-1149.sif
+srun --pty --gres=gpu:1 singularity shell --nv -B /master /master/home/tru/singularity.d/containers/c7-conda-cellpose-gpu-cu101mkl-2020-09-03-1149.sif
 ```
 
 This command opens the container that is in the `containers` folder on the home repository on your space in `Inception`. You can now start segmenting the images.
@@ -99,8 +92,9 @@ First connect to `Maestro`:
 ```
 ssh $PASTEURNAME@maestro.pasteur.fr
 ```
-Then on the server open the singularity container:
+Then on the server open the singularity container (loading the module first):
 ```
+module load singularity 
 srun --mem=100G singularity run -B /pasteur,$MYSCRATCH/.cache:/home/jovyan/.cache spheroids-graphs.sif
 ```
 This will open a local environment with Jupyter Notebook and the `Griottes` package installed. If you need extra packages, you can update by creating a new singularity container and moving it to your `Maestro` homepage. Ask Andrey Aristov if you have any issues with this.
