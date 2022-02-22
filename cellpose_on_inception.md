@@ -34,9 +34,28 @@ Now that you are connected, you can move the data from `Maestro` to `Inception`:
 scp -r $PATH_ON_MAESTRO adm.inception.hubbioit.pasteur.fr:$PATH_ON_INCEPTION
 ```
 
+Otherwise, maestro storage space can be mounted on gpulab via sshfs. 
+```
+sshfs $PASTEURNAME@maestro.pasteur.fr:/pasteur/zeus/projets/p02/Anchor/ ~/Anchor
+```
+The only problem is that this mount point won't be visible across the cluster nodes and sshfs command should be rerun on the computing node. 
+
+```
+ssh gpulab01
+sshfs $PASTEURNAME@maestro.pasteur.fr:/pasteur/zeus/projets/p02/Anchor/ ~/Anchor
+```
+
+To avoid entering the passwords averytime, run `ssh-copy-id $PASTEURNAME@maestro.pasteur.fr`
+
 ## Creating a Cellpose container on `Inception`
 
 Cellpose needs to run within a specific environment. All Python libraries can't be installed on the `Inception` server, and so before running a specific container needs to be launched. Your code will be executed within this environment, where all the appropriate packages should be available.
+
+The isies way to get singularity container is to use Docker container. Simply locate the pull address on dockerhub and run
+
+```
+singularity pull docker://aaristov85/spheroidgraphs:tagname spheroid-graph.sif
+```
 
 `Inception` uses singularity to run the containers. If you have any issues contact Andrey Aristov or Tru Huyn for more information.
 
